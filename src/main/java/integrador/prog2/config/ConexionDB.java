@@ -14,7 +14,6 @@ public class ConexionDB {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private ConexionDB() {
-
     }
 
     public static Connection getConexion() {

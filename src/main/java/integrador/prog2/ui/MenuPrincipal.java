@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class MenuPrincipal {
 
     private final Scanner scanner;
+    private final LectorConsola lector;
 
     private final CategoriaMenu categoriaMenu;
     private final ProductoMenu productoMenu;
@@ -13,10 +14,12 @@ public class MenuPrincipal {
 
     public MenuPrincipal() {
         this.scanner = new Scanner(System.in);
-        this.categoriaMenu = new CategoriaMenu();
-        this.productoMenu = new ProductoMenu();
-        this.usuarioMenu = new UsuarioMenu();
-        this.pedidoMenu = new PedidoMenu();
+        this.lector = new LectorConsola(scanner);
+
+        this.categoriaMenu = new CategoriaMenu(lector);
+        this.productoMenu = new ProductoMenu(lector);
+        this.usuarioMenu = new UsuarioMenu(lector);
+        this.pedidoMenu = new PedidoMenu(lector);
     }
 
     public void iniciar() {
@@ -24,7 +27,7 @@ public class MenuPrincipal {
 
         do {
             mostrarMenu();
-            opcion = leerOpcion();
+            opcion = lector.leerEntero("Seleccione una opción: ");
 
             switch (opcion) {
                 case 1:
@@ -58,19 +61,5 @@ public class MenuPrincipal {
         System.out.println("3. Usuarios");
         System.out.println("4. Pedidos");
         System.out.println("0. Salir");
-        System.out.print("Seleccione una opción: ");
-    }
-
-    private int leerOpcion() {
-        while (!scanner.hasNextInt()) {
-            System.out.println("Debe ingresar un número válido.");
-            scanner.nextLine();
-            System.out.print("Seleccione una opción: ");
-        }
-
-        int opcion = scanner.nextInt();
-        scanner.nextLine();
-
-        return opcion;
     }
 }

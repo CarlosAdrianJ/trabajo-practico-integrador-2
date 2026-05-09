@@ -11,6 +11,13 @@ public class Main {
     public static void main(String[] args) {
         MenuPrincipal menuPrincipal = new MenuPrincipal();
         menuPrincipal.iniciar();
-
+        /*try (Connection conexion = ConexionDB.getConexion()) {
+            System.out.println("Conexión exitosa a MySQL.");
+            System.out.println("Base de datos conectada: basedatos_tpi2");
+            System.out.println("Usuario conectado: usuario_tpi2");
+        } catch (Exception e) {
+            System.out.println("Error al probar la conexión.");
+            System.out.println(e.getMessage());
+        } */
     }
 }
