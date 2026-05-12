@@ -261,4 +261,30 @@ public class ProductoDAO implements IBaseDAO<Producto> {
 
         return producto;
     }
+    public void descontarStock(Long productoId, int cantidad, Connection con) {
+        String sql = """
+            UPDATE producto
+            SET stock = stock - ?
+            WHERE id = ?
+            AND eliminado = false
+            AND disponible = true
+            AND stock >= ?
+            """;
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, cantidad);
+            ps.setLong(2, productoId);
+            ps.setInt(3, cantidad);
+
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                throw new BusinessException("No hay stock suficiente para el producto con id: " + productoId);
+            }
+
+        } catch (SQLException e) {
+            throw new BusinessException("Error descontando stock del producto.", e);
+        }
+    }
 }
