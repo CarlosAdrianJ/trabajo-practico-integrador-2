@@ -60,6 +60,10 @@ public class PedidoMenu {
                     ManejadorErroresConsola.ejecutar(this::eliminarPedido);
                     lector.pausar();
                     break;
+                case 7:
+                    ManejadorErroresConsola.ejecutar(this::listarPedidosPorUsuario);
+                    lector.pausar();
+                    break;
                 case 0:
                     System.out.println("Volviendo al menú principal...");
                     break;
@@ -80,6 +84,7 @@ public class PedidoMenu {
         System.out.println("4. Actualizar estado del pedido");
         System.out.println("5. Actualizar forma de pago");
         System.out.println("6. Eliminar pedido");
+        System.out.println("7. Listar pedidos por usuario");
         System.out.println("0. Volver");
     }
 
@@ -321,5 +326,27 @@ public class PedidoMenu {
         System.out.println("Estado: " + pedido.getEstado());
         System.out.println("Forma de pago: " + pedido.getFormaPago());
         System.out.println("Total: " + pedido.getTotal());
+    }
+    private void listarPedidosPorUsuario() {
+        System.out.println();
+        System.out.println("=== LISTAR PEDIDOS POR USUARIO ===");
+
+        listarUsuariosDisponibles();
+
+        Long usuarioId = lector.leerLong("Ingrese el id del usuario: ");
+
+        List<Pedido> pedidos = pedidoService.listarPorUsuario(usuarioId);
+
+        if (pedidos.isEmpty()) {
+            System.out.println("No hay pedidos cargados para ese usuario.");
+            return;
+        }
+
+        for (Pedido pedido : pedidos) {
+            System.out.println("--------------------------------");
+            mostrarPedidoResumen(pedido);
+        }
+
+        System.out.println("--------------------------------");
     }
 }

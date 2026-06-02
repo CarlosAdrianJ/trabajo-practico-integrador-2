@@ -86,7 +86,7 @@ public class CategoriaMenu {
         System.out.println("=== CREAR CATEGORÍA ===");
 
         String nombre = lector.leerTextoNoVacio("Nombre: ");
-        String descripcion = lector.leerTexto("Descripción: ");
+        String descripcion = lector.leerTextoNoVacio("Descripción: ");
 
         Categoria categoriaCreada = categoriaService.crear(nombre, descripcion);
 

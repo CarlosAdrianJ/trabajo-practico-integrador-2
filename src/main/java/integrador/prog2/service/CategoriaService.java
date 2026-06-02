@@ -31,7 +31,8 @@ public class CategoriaService {
         validarNombre(nombre);
 
         String nombreNormalizado = nombre.trim();
-        String descripcionNormalizada = normalizarTextoOpcional(descripcion);
+        validarDescripcion(descripcion);
+        String descripcionNormalizada = descripcion.trim();
 
         if (categoriaDAO.existeNombre(nombreNormalizado)) {
             throw new BusinessException("Ya existe una categoría con ese nombre.");
@@ -68,7 +69,12 @@ public class CategoriaService {
         validarId(id);
 
         buscarPorId(id);
-
+        if (categoriaDAO.tieneProductosActivos(id)) {
+            throw new BusinessException(
+                    "No se puede eliminar la categoría porque tiene productos activos asociados. " +
+                            "Primero elimine o reasigne esos productos."
+            );
+        }
         categoriaDAO.eliminar(id);
     }
 
@@ -90,5 +96,10 @@ public class CategoriaService {
         }
 
         return texto.trim();
+    }
+    private void validarDescripcion(String descripcion) {
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+            throw new ValidationException("La descripción de la categoría no puede estar vacía.");
+        }
     }
 }

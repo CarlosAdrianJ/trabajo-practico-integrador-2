@@ -86,7 +86,26 @@ public class UsuarioMenu {
 
         String nombre = lector.leerTextoNoVacio("Nombre: ");
         String apellido = lector.leerTextoNoVacio("Apellido: ");
-        String mail = lector.leerTextoNoVacio("Mail: ");
+        String mail;
+
+        while (true) {
+            mail = lector.leerTextoNoVacio("Mail: ");
+
+            try {
+                usuarioService.validarMailDisponible(mail);
+                break;
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Ingrese otro mail o escriba 0 para cancelar.");
+
+                String opcion = lector.leerTexto("Continuar con otro mail: ");
+
+                if ("0".equals(opcion.trim())) {
+                    System.out.println("Operación cancelada.");
+                    return;
+                }
+            }
+        }
         String celular = lector.leerTexto("Celular: ");
         String contrasena = lector.leerTextoNoVacio("Contraseña: ");
         Rol rol = leerRolObligatorio();

@@ -218,4 +218,29 @@ public class CategoriaDAO implements IBaseDAO<Categoria> {
 
         return categoria;
     }
+    public boolean tieneProductosActivos(Long categoriaId) {
+        String sql = """
+            SELECT COUNT(*) AS total
+            FROM producto
+            WHERE categoria_id = ?
+            AND eliminado = false
+            """;
+
+        try (Connection con = ConexionDB.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setLong(1, categoriaId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total") > 0;
+                }
+            }
+
+            return false;
+
+        } catch (SQLException e) {
+            throw new BusinessException("Error verificando productos asociados a la categoría.", e);
+        }
+    }
 }

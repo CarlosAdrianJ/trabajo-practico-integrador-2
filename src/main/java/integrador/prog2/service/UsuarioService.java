@@ -165,4 +165,13 @@ public class UsuarioService {
 
         return texto.trim();
     }
+    public void validarMailDisponible(String mail) {
+        validarMail(mail);
+
+        String mailNormalizado = mail.trim().toLowerCase();
+
+        if (usuarioDAO.existeMail(mailNormalizado)) {
+            throw new BusinessException("Ya existe un usuario con ese mail.");
+        }
+    }
 }
