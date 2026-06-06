@@ -33,7 +33,7 @@ public class PedidoMenu {
 
         do {
             mostrarOpciones();
-            opcion = lector.leerEntero("Seleccione una opción: ");
+            opcion = lector.leerEntero("Seleccione una opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -65,10 +65,10 @@ public class PedidoMenu {
                     lector.pausar();
                     break;
                 case 0:
-                    System.out.println("Volviendo al menú principal...");
+                    System.out.println("Volviendo al menu principal...");
                     break;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
 
@@ -77,7 +77,7 @@ public class PedidoMenu {
 
     private void mostrarOpciones() {
         System.out.println();
-        System.out.println("=== GESTIÓN DE PEDIDOS ===");
+        System.out.println("=== GESTION DE PEDIDOS ===");
         System.out.println("1. Listar pedidos");
         System.out.println("2. Ver detalle de pedido");
         System.out.println("3. Crear pedido");
@@ -213,10 +213,10 @@ public class PedidoMenu {
         System.out.println("Pedido seleccionado:");
         mostrarPedidoResumen(pedido);
 
-        boolean confirma = lector.confirmar("¿Confirma la eliminación lógica del pedido?");
+        boolean confirma = lector.confirmar("¿Confirma la eliminacion logica del pedido?");
 
         if (!confirma) {
-            System.out.println("Operación cancelada.");
+            System.out.println("Operacion cancelada.");
             return;
         }
 
@@ -272,7 +272,7 @@ public class PedidoMenu {
             System.out.println("2. TRANSFERENCIA");
             System.out.println("3. EFECTIVO");
 
-            int opcion = lector.leerEntero("Opción: ");
+            int opcion = lector.leerEntero("Opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -282,7 +282,7 @@ public class PedidoMenu {
                 case 3:
                     return FormaPago.EFECTIVO;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
         }
@@ -297,7 +297,7 @@ public class PedidoMenu {
             System.out.println("3. TERMINADO");
             System.out.println("4. CANCELADO");
 
-            int opcion = lector.leerEntero("Opción: ");
+            int opcion = lector.leerEntero("Opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -309,7 +309,7 @@ public class PedidoMenu {
                 case 4:
                     return Estado.CANCELADO;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
         }

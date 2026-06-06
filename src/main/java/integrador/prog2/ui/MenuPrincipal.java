@@ -27,7 +27,7 @@ public class MenuPrincipal {
 
         do {
             mostrarMenu();
-            opcion = lector.leerEntero("Seleccione una opción: ");
+            opcion = lector.leerEntero("Seleccione una opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -46,7 +46,7 @@ public class MenuPrincipal {
                     System.out.println("Saliendo del sistema...");
                     break;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
 
@@ -56,7 +56,7 @@ public class MenuPrincipal {
     private void mostrarMenu() {
         System.out.println();
         System.out.println("=== SISTEMA DE PEDIDOS FOOD STORE ===");
-        System.out.println("1. Categorías");
+        System.out.println("1. Categorias");
         System.out.println("2. Productos");
         System.out.println("3. Usuarios");
         System.out.println("4. Pedidos");

@@ -20,7 +20,7 @@ public class CategoriaMenu {
 
         do {
             mostrarOpciones();
-            opcion = lector.leerEntero("Seleccione una opción: ");
+            opcion = lector.leerEntero("Seleccione una opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -40,10 +40,10 @@ public class CategoriaMenu {
                     lector.pausar();
                     break;
                 case 0:
-                    System.out.println("Volviendo al menú principal...");
+                    System.out.println("Volviendo al menu principal...");
                     break;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
 
@@ -52,11 +52,11 @@ public class CategoriaMenu {
 
     private void mostrarOpciones() {
         System.out.println();
-        System.out.println("=== GESTIÓN DE CATEGORÍAS ===");
-        System.out.println("1. Listar categorías");
-        System.out.println("2. Crear categoría");
-        System.out.println("3. Editar categoría");
-        System.out.println("4. Eliminar categoría");
+        System.out.println("=== GESTION DE CATEGORIAS ===");
+        System.out.println("1. Listar categorias");
+        System.out.println("2. Crear categoria");
+        System.out.println("3. Editar categoria");
+        System.out.println("4. Eliminar categoria");
         System.out.println("0. Volver");
     }
 
@@ -64,10 +64,10 @@ public class CategoriaMenu {
         List<Categoria> categorias = categoriaService.listar();
 
         System.out.println();
-        System.out.println("=== LISTADO DE CATEGORÍAS ===");
+        System.out.println("=== LISTADO DE CATEGORIAS ===");
 
         if (categorias.isEmpty()) {
-            System.out.println("No hay categorías cargadas.");
+            System.out.println("No hay categorias cargadas.");
             return;
         }
 
@@ -75,7 +75,7 @@ public class CategoriaMenu {
             System.out.println("--------------------------------");
             System.out.println("ID: " + categoria.getId());
             System.out.println("Nombre: " + categoria.getNombre());
-            System.out.println("Descripción: " + mostrarTexto(categoria.getDescripcion()));
+            System.out.println("Descripcion: " + mostrarTexto(categoria.getDescripcion()));
         }
 
         System.out.println("--------------------------------");
@@ -83,75 +83,75 @@ public class CategoriaMenu {
 
     private void crearCategoria() {
         System.out.println();
-        System.out.println("=== CREAR CATEGORÍA ===");
+        System.out.println("=== CREAR CATEGORIA ===");
 
         String nombre = lector.leerTextoNoVacio("Nombre: ");
-        String descripcion = lector.leerTextoNoVacio("Descripción: ");
+        String descripcion = lector.leerTextoNoVacio("Descripcion: ");
 
         Categoria categoriaCreada = categoriaService.crear(nombre, descripcion);
 
         System.out.println();
-        System.out.println("Categoría creada correctamente.");
+        System.out.println("Categoria creada correctamente.");
         System.out.println("ID generado: " + categoriaCreada.getId());
     }
 
     private void editarCategoria() {
         System.out.println();
-        System.out.println("=== EDITAR CATEGORÍA ===");
+        System.out.println("=== EDITAR CATEGORIA ===");
 
         listarCategorias();
 
-        Long id = lector.leerLong("Ingrese el id de la categoría a editar: ");
+        Long id = lector.leerLong("Ingrese el id de la categoria a editar: ");
 
         Categoria categoriaActual = categoriaService.buscarPorId(id);
 
         System.out.println();
-        System.out.println("Categoría actual:");
+        System.out.println("Categoria actual:");
         System.out.println("ID: " + categoriaActual.getId());
         System.out.println("Nombre: " + categoriaActual.getNombre());
-        System.out.println("Descripción: " + mostrarTexto(categoriaActual.getDescripcion()));
+        System.out.println("Descripcion: " + mostrarTexto(categoriaActual.getDescripcion()));
 
         System.out.println();
         System.out.println("Ingrese los nuevos datos. Presione ENTER para mantener el valor actual.");
 
         String nuevoNombre = lector.leerTexto("Nuevo nombre: ");
-        String nuevaDescripcion = lector.leerTexto("Nueva descripción: ");
+        String nuevaDescripcion = lector.leerTexto("Nueva descripcion: ");
 
         Categoria categoriaActualizada = categoriaService.actualizar(id, nuevoNombre, nuevaDescripcion);
 
         System.out.println();
-        System.out.println("Categoría actualizada correctamente.");
+        System.out.println("Categoria actualizada correctamente.");
         System.out.println("ID: " + categoriaActualizada.getId());
         System.out.println("Nombre: " + categoriaActualizada.getNombre());
-        System.out.println("Descripción: " + mostrarTexto(categoriaActualizada.getDescripcion()));
+        System.out.println("Descripcion: " + mostrarTexto(categoriaActualizada.getDescripcion()));
     }
 
     private void eliminarCategoria() {
         System.out.println();
-        System.out.println("=== ELIMINAR CATEGORÍA ===");
+        System.out.println("=== ELIMINAR CATEGORIA ===");
 
         listarCategorias();
 
-        Long id = lector.leerLong("Ingrese el id de la categoría a eliminar: ");
+        Long id = lector.leerLong("Ingrese el id de la categoria a eliminar: ");
 
         Categoria categoria = categoriaService.buscarPorId(id);
 
         System.out.println();
-        System.out.println("Categoría seleccionada:");
+        System.out.println("Categoria seleccionada:");
         System.out.println("ID: " + categoria.getId());
         System.out.println("Nombre: " + categoria.getNombre());
-        System.out.println("Descripción: " + mostrarTexto(categoria.getDescripcion()));
+        System.out.println("Descripcion: " + mostrarTexto(categoria.getDescripcion()));
 
-        boolean confirma = lector.confirmar("¿Confirma la eliminación lógica de esta categoría?");
+        boolean confirma = lector.confirmar("¿Confirma la eliminacion logica de esta categoria?");
 
         if (!confirma) {
-            System.out.println("Operación cancelada.");
+            System.out.println("Operacion cancelada.");
             return;
         }
 
         categoriaService.eliminar(id);
 
-        System.out.println("Categoría eliminada correctamente.");
+        System.out.println("Categoria eliminada correctamente.");
     }
 
     private String mostrarTexto(String texto) {

@@ -20,7 +20,7 @@ public class LectorConsola {
                 return valor;
             }
 
-            System.out.println("Debe ingresar un número entero válido.");
+            System.out.println("Debe ingresar un numero entero valido.");
             scanner.nextLine();
         }
     }
@@ -35,7 +35,7 @@ public class LectorConsola {
                 return valor;
             }
 
-            System.out.println("Debe ingresar un número válido.");
+            System.out.println("Debe ingresar un numero valido.");
             scanner.nextLine();
         }
     }
@@ -50,7 +50,7 @@ public class LectorConsola {
                 return valor;
             }
 
-            System.out.println("Debe ingresar un número decimal válido.");
+            System.out.println("Debe ingresar un número decimal valido.");
             scanner.nextLine();
         }
     }

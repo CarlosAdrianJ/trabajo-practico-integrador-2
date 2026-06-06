@@ -24,7 +24,7 @@ public class ProductoMenu {
 
         do {
             mostrarOpciones();
-            opcion = lector.leerEntero("Seleccione una opción: ");
+            opcion = lector.leerEntero("Seleccione una opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -48,10 +48,10 @@ public class ProductoMenu {
                     lector.pausar();
                     break;
                 case 0:
-                    System.out.println("Volviendo al menú principal...");
+                    System.out.println("Volviendo al menu principal...");
                     break;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
 
@@ -60,9 +60,9 @@ public class ProductoMenu {
 
     private void mostrarOpciones() {
         System.out.println();
-        System.out.println("=== GESTIÓN DE PRODUCTOS ===");
+        System.out.println("=== GESTION DE PRODUCTOS ===");
         System.out.println("1. Listar productos");
-        System.out.println("2. Listar productos por categoría");
+        System.out.println("2. Listar productos por categoria");
         System.out.println("3. Crear producto");
         System.out.println("4. Editar producto");
         System.out.println("5. Eliminar producto");
@@ -85,16 +85,16 @@ public class ProductoMenu {
 
     private void listarProductosPorCategoria() {
         System.out.println();
-        System.out.println("=== LISTAR PRODUCTOS POR CATEGORÍA ===");
+        System.out.println("=== LISTAR PRODUCTOS POR CATEGORIA ===");
 
         listarCategoriasDisponibles();
 
-        Long categoriaId = lector.leerLong("Ingrese el id de la categoría: ");
+        Long categoriaId = lector.leerLong("Ingrese el id de la categoria: ");
 
         List<Producto> productos = productoService.listarPorCategoria(categoriaId);
 
         if (productos.isEmpty()) {
-            System.out.println("No hay productos cargados para esa categoría.");
+            System.out.println("No hay productos cargados para esa categoria.");
             return;
         }
 
@@ -109,11 +109,11 @@ public class ProductoMenu {
 
         String nombre = lector.leerTextoNoVacio("Nombre: ");
         Double precio = lector.leerDouble("Precio: ");
-        String descripcion = lector.leerTexto("Descripción: ");
+        String descripcion = lector.leerTexto("Descripcion: ");
         int stock = lector.leerEntero("Stock: ");
         String imagen = lector.leerTexto("Imagen: ");
-        boolean disponible = lector.confirmar("¿El producto está disponible?");
-        Long categoriaId = lector.leerLong("Id de categoría: ");
+        boolean disponible = lector.confirmar("¿El producto esta disponible?");
+        Long categoriaId = lector.leerLong("Id de categoria: ");
 
         Producto productoCreado = productoService.crear(
                 nombre,
@@ -149,7 +149,7 @@ public class ProductoMenu {
 
         String nuevoNombre = lector.leerTexto("Nuevo nombre: ");
         Double nuevoPrecio = leerDoubleOpcional("Nuevo precio: ");
-        String nuevaDescripcion = lector.leerTexto("Nueva descripción: ");
+        String nuevaDescripcion = lector.leerTexto("Nueva descripcion: ");
         Integer nuevoStock = leerEnteroOpcional("Nuevo stock: ");
         String nuevaImagen = lector.leerTexto("Nueva imagen: ");
 
@@ -157,7 +157,7 @@ public class ProductoMenu {
 
         System.out.println();
         System.out.println("Categoría actual: " + productoActual.getCategoria().getNombre());
-        boolean cambiarCategoria = lector.confirmar("¿Desea cambiar la categoría?");
+        boolean cambiarCategoria = lector.confirmar("¿Desea cambiar la categoria?");
 
         Long nuevaCategoriaId = null;
 
@@ -196,10 +196,10 @@ public class ProductoMenu {
         System.out.println("Producto seleccionado:");
         mostrarProducto(producto);
 
-        boolean confirma = lector.confirmar("¿Confirma la eliminación lógica de este producto?");
+        boolean confirma = lector.confirmar("¿Confirma la eliminacion logica de este producto?");
 
         if (!confirma) {
-            System.out.println("Operación cancelada.");
+            System.out.println("Operacion cancelada.");
             return;
         }
 
@@ -212,10 +212,10 @@ public class ProductoMenu {
         List<Categoria> categorias = categoriaService.listar();
 
         System.out.println();
-        System.out.println("=== CATEGORÍAS DISPONIBLES ===");
+        System.out.println("=== CATEGORIAS DISPONIBLES ===");
 
         if (categorias.isEmpty()) {
-            System.out.println("No hay categorías cargadas.");
+            System.out.println("No hay categorias cargadas.");
             return;
         }
 
@@ -241,11 +241,11 @@ public class ProductoMenu {
         System.out.println("ID: " + producto.getId());
         System.out.println("Nombre: " + producto.getNombre());
         System.out.println("Precio: " + producto.getPrecio());
-        System.out.println("Descripción: " + mostrarTexto(producto.getDescripcion()));
+        System.out.println("Descripcion: " + mostrarTexto(producto.getDescripcion()));
         System.out.println("Stock: " + producto.getStock());
         System.out.println("Imagen: " + mostrarTexto(producto.getImagen()));
-        System.out.println("Disponible: " + (producto.getDisponible() ? "Sí" : "No"));
-        System.out.println("Categoría: " + categoria);
+        System.out.println("Disponible: " + (producto.getDisponible() ? "SI" : "NO"));
+        System.out.println("Categoria: " + categoria);
     }
 
     private String mostrarTexto(String texto) {
@@ -266,7 +266,7 @@ public class ProductoMenu {
         try {
             return Double.parseDouble(texto.trim());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Debe ingresar un número decimal válido.");
+            throw new IllegalArgumentException("Debe ingresar un numero decimal valido.");
         }
     }
 
@@ -280,7 +280,7 @@ public class ProductoMenu {
         try {
             return Integer.parseInt(texto.trim());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Debe ingresar un número entero válido.");
+            throw new IllegalArgumentException("Debe ingresar un número entero valido.");
         }
     }
 
@@ -291,13 +291,13 @@ public class ProductoMenu {
         System.out.println("2. No disponible");
         System.out.println("0. Mantener valor actual");
 
-        int opcion = lector.leerEntero("Seleccione una opción: ");
+        int opcion = lector.leerEntero("Seleccione una opcion: ");
 
         return switch (opcion) {
             case 1 -> true;
             case 2 -> false;
             case 0 -> null;
-            default -> throw new IllegalArgumentException("Opción inválida para disponibilidad.");
+            default -> throw new IllegalArgumentException("Opcion invalida para disponibilidad.");
         };
     }
 }

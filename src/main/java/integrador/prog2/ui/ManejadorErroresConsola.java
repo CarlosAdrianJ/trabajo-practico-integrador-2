@@ -13,15 +13,15 @@ public class ManejadorErroresConsola {
         try {
             accion.run();
         } catch (ValidationException e) {
-            mostrarError("Error de validación", e.getMessage());
+            mostrarError("Error de validacion", e.getMessage());
         } catch (EntityNotFoundException e) {
             mostrarError("Registro no encontrado", e.getMessage());
         } catch (BusinessException e) {
             mostrarError("Error del sistema", e.getMessage());
         } catch (IllegalArgumentException e) {
-            mostrarError("Entrada inválida", e.getMessage());
+            mostrarError("Entrada invalida", e.getMessage());
         } catch (Exception e) {
-            mostrarError("Error inesperado", "Ocurrió un error no previsto.");
+            mostrarError("Error inesperado", "Ocurrio un error no previsto.");
         }
     }
 

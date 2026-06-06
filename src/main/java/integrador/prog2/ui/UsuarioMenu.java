@@ -21,7 +21,7 @@ public class UsuarioMenu {
 
         do {
             mostrarOpciones();
-            opcion = lector.leerEntero("Seleccione una opción: ");
+            opcion = lector.leerEntero("Seleccione una opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -44,7 +44,7 @@ public class UsuarioMenu {
                     System.out.println("Volviendo al menú principal...");
                     break;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
 
@@ -53,7 +53,7 @@ public class UsuarioMenu {
 
     private void mostrarOpciones() {
         System.out.println();
-        System.out.println("=== GESTIÓN DE USUARIOS ===");
+        System.out.println("=== GESTION DE USUARIOS ===");
         System.out.println("1. Listar usuarios");
         System.out.println("2. Crear usuario");
         System.out.println("3. Editar usuario");
@@ -101,7 +101,7 @@ public class UsuarioMenu {
                 String opcion = lector.leerTexto("Continuar con otro mail: ");
 
                 if ("0".equals(opcion.trim())) {
-                    System.out.println("Operación cancelada.");
+                    System.out.println("Operacion cancelada.");
                     return;
                 }
             }
@@ -177,10 +177,10 @@ public class UsuarioMenu {
         System.out.println("Usuario seleccionado:");
         mostrarUsuario(usuario);
 
-        boolean confirma = lector.confirmar("¿Confirma la eliminación lógica de este usuario?");
+        boolean confirma = lector.confirmar("¿Confirma la eliminacion logica de este usuario?");
 
         if (!confirma) {
-            System.out.println("Operación cancelada.");
+            System.out.println("Operacion cancelada.");
             return;
         }
 
@@ -196,7 +196,7 @@ public class UsuarioMenu {
             System.out.println("1. ADMIN");
             System.out.println("2. USUARIO");
 
-            int opcion = lector.leerEntero("Opción: ");
+            int opcion = lector.leerEntero("Opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -204,7 +204,7 @@ public class UsuarioMenu {
                 case 2:
                     return Rol.USUARIO;
                 default:
-                    System.out.println("Opción inválida. Intente nuevamente.");
+                    System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
         }
@@ -217,13 +217,13 @@ public class UsuarioMenu {
         System.out.println("2. USUARIO");
         System.out.println("0. Mantener valor actual");
 
-        int opcion = lector.leerEntero("Opción: ");
+        int opcion = lector.leerEntero("Opcion: ");
 
         return switch (opcion) {
             case 1 -> Rol.ADMIN;
             case 2 -> Rol.USUARIO;
             case 0 -> null;
-            default -> throw new IllegalArgumentException("Opción inválida para rol.");
+            default -> throw new IllegalArgumentException("Opción invalida para rol.");
         };
     }
 
