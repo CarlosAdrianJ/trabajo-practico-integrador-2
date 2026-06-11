@@ -50,7 +50,7 @@ public class LectorConsola {
                 return valor;
             }
 
-            System.out.println("Debe ingresar un número decimal valido.");
+            System.out.println("Debe ingresar un numero decimal valido.");
             scanner.nextLine();
         }
     }
@@ -69,7 +69,7 @@ public class LectorConsola {
                 return texto.trim();
             }
 
-            System.out.println("El texto no puede estar vacío.");
+            System.out.println("El texto no puede estar vacio.");
         }
     }
 

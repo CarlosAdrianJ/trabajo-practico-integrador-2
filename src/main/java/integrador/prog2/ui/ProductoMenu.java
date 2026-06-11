@@ -156,14 +156,14 @@ public class ProductoMenu {
         Boolean nuevaDisponibilidad = leerBooleanOpcional("Nueva disponibilidad");
 
         System.out.println();
-        System.out.println("Categoría actual: " + productoActual.getCategoria().getNombre());
+        System.out.println("Categoria actual: " + productoActual.getCategoria().getNombre());
         boolean cambiarCategoria = lector.confirmar("¿Desea cambiar la categoria?");
 
         Long nuevaCategoriaId = null;
 
         if (cambiarCategoria) {
             listarCategoriasDisponibles();
-            nuevaCategoriaId = lector.leerLong("Nuevo id de categoría: ");
+            nuevaCategoriaId = lector.leerLong("Nuevo id de categoria: ");
         }
 
         Producto productoActualizado = productoService.actualizar(
@@ -280,7 +280,7 @@ public class ProductoMenu {
         try {
             return Integer.parseInt(texto.trim());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Debe ingresar un número entero valido.");
+            throw new IllegalArgumentException("Debe ingresar un numero entero valido.");
         }
     }
 

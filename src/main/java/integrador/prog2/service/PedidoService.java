@@ -1,6 +1,7 @@
 package integrador.prog2.service;
 
-import integrador.prog2.dao.PedidoDAO;
+import integrador.prog2.data.MemoriaDatos;
+import integrador.prog2.entities.DetallePedido;
 import integrador.prog2.entities.Pedido;
 import integrador.prog2.entities.Producto;
 import integrador.prog2.entities.Usuario;
@@ -10,37 +11,39 @@ import integrador.prog2.exception.BusinessException;
 import integrador.prog2.exception.EntityNotFoundException;
 import integrador.prog2.exception.ValidationException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public class PedidoService {
 
-    private final PedidoDAO pedidoDAO;
     private final UsuarioService usuarioService;
     private final ProductoService productoService;
 
     public PedidoService() {
-        this.pedidoDAO = new PedidoDAO();
         this.usuarioService = new UsuarioService();
         this.productoService = new ProductoService();
     }
 
     public List<Pedido> listar() {
-        return pedidoDAO.listar();
+        return MemoriaDatos.PEDIDOS.stream()
+                .filter(pedido -> !pedido.isEliminado())
+                .sorted(Comparator.comparing(Pedido::getId))
+                .toList();
     }
 
     public Pedido buscarPorId(Long id) {
         validarId(id);
 
-        return pedidoDAO.buscarPorId(id)
+        return MemoriaDatos.PEDIDOS.stream()
+                .filter(pedido -> !pedido.isEliminado())
+                .filter(pedido -> pedido.getId().equals(id))
+                .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Pedido", id));
     }
 
     public Pedido buscarPorIdConDetalles(Long id) {
-        validarId(id);
-
-        return pedidoDAO.buscarPorIdConDetalles(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido", id));
+        return buscarPorId(id);
     }
 
     public List<Pedido> listarPorUsuario(Long usuarioId) {
@@ -48,7 +51,12 @@ public class PedidoService {
 
         usuarioService.buscarPorId(usuarioId);
 
-        return pedidoDAO.listarPorUsuario(usuarioId);
+        return MemoriaDatos.PEDIDOS.stream()
+                .filter(pedido -> !pedido.isEliminado())
+                .filter(pedido -> pedido.getUsuario() != null)
+                .filter(pedido -> pedido.getUsuario().getId().equals(usuarioId))
+                .sorted(Comparator.comparing(Pedido::getId))
+                .toList();
     }
 
     public Pedido crear(Long usuarioId, FormaPago formaPago, Map<Long, Integer> productosCantidades) {
@@ -62,6 +70,7 @@ public class PedidoService {
         Usuario usuario = usuarioService.buscarPorId(usuarioId);
 
         Pedido pedido = new Pedido(usuario, formaPago);
+        pedido.setId(MemoriaDatos.siguienteIdPedido());
 
         for (Map.Entry<Long, Integer> item : productosCantidades.entrySet()) {
             Long productoId = item.getKey();
@@ -73,7 +82,7 @@ public class PedidoService {
             Producto producto = productoService.buscarPorId(productoId);
 
             if (producto.getDisponible() == null || !producto.getDisponible()) {
-                throw new BusinessException("El producto no está disponible: " + producto.getNombre());
+                throw new BusinessException("El producto no esta disponible: " + producto.getNombre());
             }
 
             if (producto.getStock() < cantidad) {
@@ -91,40 +100,48 @@ public class PedidoService {
             throw new ValidationException("El pedido debe tener al menos un detalle.");
         }
 
-        pedido.setTotal(pedido.calcularTotal());
+        for (DetallePedido detalle : pedido.getDetalles()) {
+            detalle.setId(MemoriaDatos.siguienteIdDetallePedido());
+            Producto producto = detalle.getProducto();
+            producto.setStock(producto.getStock() - detalle.getCantidad());
+        }
 
-        return pedidoDAO.crearConDetalles(pedido);
+        pedido.setTotal(pedido.calcularTotal());
+        MemoriaDatos.PEDIDOS.add(pedido);
+
+        return pedido;
     }
 
     public void actualizarEstado(Long pedidoId, Estado estado) {
         validarId(pedidoId);
         validarEstado(estado);
 
-        buscarPorId(pedidoId);
-
-        pedidoDAO.actualizarEstado(pedidoId, estado);
+        Pedido pedido = buscarPorId(pedidoId);
+        pedido.setEstado(estado);
     }
 
     public void actualizarFormaPago(Long pedidoId, FormaPago formaPago) {
         validarId(pedidoId);
         validarFormaPago(formaPago);
 
-        buscarPorId(pedidoId);
-
-        pedidoDAO.actualizarFormaPago(pedidoId, formaPago);
+        Pedido pedido = buscarPorId(pedidoId);
+        pedido.setFormaPago(formaPago);
     }
 
     public void eliminar(Long pedidoId) {
         validarId(pedidoId);
 
-        buscarPorId(pedidoId);
+        Pedido pedido = buscarPorId(pedidoId);
+        pedido.setEliminado(true);
 
-        pedidoDAO.eliminar(pedidoId);
+        for (DetallePedido detalle : pedido.getDetalles()) {
+            detalle.setEliminado(true);
+        }
     }
 
     private void validarId(Long id) {
         if (id == null || id <= 0) {
-            throw new ValidationException("El id debe ser un número mayor que cero.");
+            throw new ValidationException("El id debe ser un numero mayor que cero.");
         }
     }
 
@@ -136,13 +153,13 @@ public class PedidoService {
 
     private void validarFormaPago(FormaPago formaPago) {
         if (formaPago == null) {
-            throw new ValidationException("Debe seleccionar una forma de pago válida.");
+            throw new ValidationException("Debe seleccionar una forma de pago valida.");
         }
     }
 
     private void validarEstado(Estado estado) {
         if (estado == null) {
-            throw new ValidationException("Debe seleccionar un estado válido.");
+            throw new ValidationException("Debe seleccionar un estado valido.");
         }
     }
 }

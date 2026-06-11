@@ -1,145 +1,189 @@
-# Food Store Console
+# Sistema de Pedidos Food Store
 
-Sistema de gestión de pedidos de comida desarrollado como Trabajo Práctico Integrador de Programación 2.
+Proyecto integrador de **Programación II** desarrollado en **Java**.
 
-El proyecto consiste en una aplicación de consola desarrollada en Java 21, utilizando Programación Orientada a Objetos, JDBC puro, patrón DAO, capa de servicios y base de datos MySQL.
+Food Store es una aplicación de consola para administrar categorías, productos, usuarios, perfiles y pedidos.  
+El sistema funciona con **colecciones en memoria** y datos iniciales precargados en el código.
 
 ## Tecnologías utilizadas
 
 - Java 21
-- Gradle
-- MySQL
-- MySQL Workbench
-- JDBC
-- IntelliJ IDEA
+- Programación orientada a objetos
+- Colecciones Java
+- Aplicación de consola
+- Manejo de excepciones personalizadas
 
-## Base de datos
+## Estructura del proyecto
 
-El sistema utiliza una base de datos MySQL llamada:
-
-```sql
-basedatos_tpi2
+```txt
+java/
+└── integrador/
+    └── prog2/
+        ├── Main.java
+        ├── data/
+        │   └── MemoriaDatos.java
+        ├── entities/
+        ├── enums/
+        ├── exception/
+        ├── service/
+        └── ui/
 ```
 
-Antes de ejecutar el proyecto, se debe crear la base de datos y las tablas ejecutando el archivo:
+## Funcionamiento general
 
-```text
-schema.sql
+La aplicación está organizada por capas:
+
+```txt
+UI -> Service -> Data -> Entities
 ```
 
-Este archivo se encuentra en la raíz del proyecto.
+- `ui`: contiene los menús de consola.
+- `service`: contiene la lógica de negocio y validaciones.
+- `data`: contiene las colecciones y los datos precargados.
+- `entities`: contiene las clases principales del sistema.
+- `enums`: contiene roles, estados y formas de pago.
+- `exception`: contiene excepciones personalizadas.
 
-## Configuración de conexión
+## Datos en memoria
 
-La conexión a la base de datos se encuentra centralizada en la clase:
+Los datos se almacenan en listas dentro de:
 
-```text
-src/main/java/integrador/prog2/config/ConexionDB.java
+```txt
+java/integrador/prog2/data/MemoriaDatos.java
 ```
 
-En esa clase se configuran los siguientes datos:
+Al iniciar el programa se cargan datos de ejemplo:
 
-```java
-private static final String URL = "jdbc:mysql://localhost:3306/basedatos_tpi2";
-private static final String USUARIO = "usuario_tpi2";
-private static final String PASSWORD = "Tpi2_2026!";
-private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-```
+- Categorías.
+- Productos.
+- Usuarios.
+- Perfiles de usuario.
+- Pedidos.
 
-Si el usuario o la contraseña de MySQL son diferentes, deben modificarse en esa clase antes de ejecutar el programa.
-
-## Cómo ejecutar el proyecto desde IntelliJ IDEA
-
-1. Abrir IntelliJ IDEA.
-
-2. Seleccionar la opción:
-
-```text
-Open
-```
-
-3. Elegir la carpeta raíz del proyecto.
-
-4. Esperar a que IntelliJ cargue el proyecto Gradle.
-
-5. Verificar que el proyecto esté usando Java 21.
-
-Para hacerlo:
-
-```text
-File > Project Structure > Project SDK
-```
-
-Debe estar seleccionado:
-
-```text
-Java 21
-```
-
-6. Verificar que MySQL esté iniciado.
-
-Abrir MySQL Workbench y comprobar que exista la base de datos:
-
-```sql
-basedatos_tpi2
-```
-
-7. Ejecutar el archivo `schema.sql` desde MySQL Workbench para crear las tablas y cargar los datos iniciales.
-
-8. En IntelliJ, abrir la clase:
-
-```text
-src/main/java/integrador/prog2/Main.java
-```
-
-9. Ejecutar el método `main`.
-
-Se puede hacer clic en el botón verde que aparece al lado de:
-
-```java
-public static void main(String[] args)
-```
-
-10. Al iniciar, el sistema mostrará el menú principal en consola:
-
-```text
-=== SISTEMA DE PEDIDOS FOOD STORE ===
-1. Categorías
-2. Productos
-3. Usuarios
-4. Pedidos
-0. Salir
-```
-
-Desde ese menú se puede acceder a la gestión de categorías, productos, usuarios y pedidos.
+Los cambios realizados durante la ejecución existen solo mientras el programa está abierto.  
+Al cerrar y volver a ejecutar, se cargan nuevamente los datos iniciales.
 
 ## Funcionalidades principales
 
-El sistema permite:
+### Categorías
 
-- Crear, listar, editar y eliminar lógicamente categorías.
-- Crear, listar, editar y eliminar lógicamente productos.
-- Asociar productos a categorías.
-- Crear, listar, editar y eliminar lógicamente usuarios.
-- Crear pedidos con detalles.
-- Asociar pedidos a usuarios.
-- Asociar detalles de pedido a productos.
-- Calcular subtotales y total del pedido.
-- Actualizar estado del pedido.
-- Actualizar forma de pago.
-- Descontar stock al crear pedidos.
-- Persistir toda la información en MySQL.
+- Crear categoría.
+- Listar categorías.
+- Buscar por ID.
+- Actualizar categoría.
+- Eliminar mediante baja lógica.
 
-## Observaciones
+### Productos
 
-El sistema utiliza baja lógica mediante el campo:
+- Crear producto.
+- Listar productos.
+- Buscar por ID.
+- Actualizar producto.
+- Eliminar mediante baja lógica.
+- Controlar stock y disponibilidad.
+- Asociar producto a una categoría.
 
-```text
-eliminado
+### Usuarios
+
+- Crear usuario.
+- Listar usuarios.
+- Buscar por ID.
+- Actualizar usuario.
+- Eliminar mediante baja lógica.
+- Asignar rol.
+
+### Perfiles de usuario
+
+- Crear perfil.
+- Consultar perfil.
+- Actualizar perfil.
+- Asociar perfil a un usuario.
+
+### Pedidos
+
+- Crear pedido.
+- Agregar productos al pedido.
+- Calcular total.
+- Descontar stock.
+- Consultar pedidos.
+- Actualizar estado.
+- Registrar forma de pago.
+
+## Baja lógica
+
+El sistema no elimina físicamente los objetos de las listas.  
+Cuando se elimina un registro, se marca como:
+
+```java
+eliminado = true;
 ```
 
-Por lo tanto, los registros no se eliminan físicamente de la base de datos, sino que se marcan como eliminados para conservar el historial.
+Luego, los listados y búsquedas principales ignoran los elementos eliminados.
 
-## Ejecución esperada
+## Requisitos
 
-Si la base de datos está creada correctamente y la conexión está bien configurada, el proyecto debe ejecutarse desde IntelliJ sin errores y mostrar el menú principal en consola.
+- Java 21 o superior.
+- No requiere base de datos.
+- No requiere configuración externa.
+
+## Ejecución desde IntelliJ IDEA
+
+1. Abrir IntelliJ IDEA.
+2. Seleccionar `Open`.
+3. Abrir la carpeta del proyecto.
+4. Verificar que el SDK sea Java 21 o superior.
+5. Ejecutar el archivo:
+
+```txt
+java/integrador/prog2/Main.java
+```
+
+## Ejecución desde terminal
+
+Desde la raíz del proyecto:
+
+```bash
+mkdir -p out
+javac -d out $(find java -name "*.java")
+java -cp out integrador.prog2.Main
+```
+
+## Ejecución desde Windows PowerShell
+
+Desde la raíz del proyecto:
+
+```powershell
+mkdir out
+javac -d out (Get-ChildItem -Recurse -Filter *.java -Path .\java).FullName
+java -cp out integrador.prog2.Main
+```
+
+## Menú principal
+
+Al ejecutar el sistema se muestra:
+
+```txt
+=== SISTEMA DE PEDIDOS FOOD STORE ===
+1. Categorias
+2. Productos
+3. Usuarios
+4. Pedidos
+5. Perfiles de usuario
+0. Salir
+```
+
+## Modificar datos iniciales
+
+Para cambiar los datos precargados, editar:
+
+```txt
+java/integrador/prog2/data/MemoriaDatos.java
+```
+
+Dentro del método:
+
+```java
+private static void cargarDatosIniciales()
+```
+
+Ahí se pueden modificar o agregar categorías, productos, usuarios, perfiles y pedidos iniciales.

@@ -1,25 +1,27 @@
 package integrador.prog2.service;
 
-import integrador.prog2.dao.ProductoDAO;
+import integrador.prog2.data.MemoriaDatos;
 import integrador.prog2.entities.Categoria;
 import integrador.prog2.entities.Producto;
 import integrador.prog2.exception.EntityNotFoundException;
 import integrador.prog2.exception.ValidationException;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class ProductoService {
 
-    private final ProductoDAO productoDAO;
     private final CategoriaService categoriaService;
 
     public ProductoService() {
-        this.productoDAO = new ProductoDAO();
         this.categoriaService = new CategoriaService();
     }
 
     public List<Producto> listar() {
-        return productoDAO.listar();
+        return MemoriaDatos.PRODUCTOS.stream()
+                .filter(producto -> !producto.isEliminado())
+                .sorted(Comparator.comparing(Producto::getId))
+                .toList();
     }
 
     public List<Producto> listarPorCategoria(Long categoriaId) {
@@ -27,13 +29,21 @@ public class ProductoService {
 
         categoriaService.buscarPorId(categoriaId);
 
-        return productoDAO.listarPorCategoria(categoriaId);
+        return MemoriaDatos.PRODUCTOS.stream()
+                .filter(producto -> !producto.isEliminado())
+                .filter(producto -> producto.getCategoria() != null)
+                .filter(producto -> producto.getCategoria().getId().equals(categoriaId))
+                .sorted(Comparator.comparing(Producto::getId))
+                .toList();
     }
 
     public Producto buscarPorId(Long id) {
         validarId(id);
 
-        return productoDAO.buscarPorId(id)
+        return MemoriaDatos.PRODUCTOS.stream()
+                .filter(producto -> !producto.isEliminado())
+                .filter(producto -> producto.getId().equals(id))
+                .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Producto", id));
     }
 
@@ -62,8 +72,11 @@ public class ProductoService {
                 disponible != null ? disponible : true,
                 categoria
         );
+        producto.setId(MemoriaDatos.siguienteIdProducto());
 
-        return productoDAO.crear(producto);
+        MemoriaDatos.PRODUCTOS.add(producto);
+
+        return producto;
     }
 
     public Producto actualizar(
@@ -112,26 +125,25 @@ public class ProductoService {
             producto.setCategoria(categoria);
         }
 
-        return productoDAO.actualizar(producto);
+        return producto;
     }
 
     public void eliminar(Long id) {
         validarId(id);
 
-        buscarPorId(id);
-
-        productoDAO.eliminar(id);
+        Producto producto = buscarPorId(id);
+        producto.setEliminado(true);
     }
 
     private void validarId(Long id) {
         if (id == null || id <= 0) {
-            throw new ValidationException("El id debe ser un número mayor que cero.");
+            throw new ValidationException("El id debe ser un numero mayor que cero.");
         }
     }
 
     private void validarNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ValidationException("El nombre del producto no puede estar vacío.");
+            throw new ValidationException("El nombre del producto no puede estar vacio.");
         }
     }
 

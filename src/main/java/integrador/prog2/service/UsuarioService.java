@@ -1,30 +1,31 @@
 package integrador.prog2.service;
 
-import integrador.prog2.dao.UsuarioDAO;
+import integrador.prog2.data.MemoriaDatos;
 import integrador.prog2.entities.Usuario;
 import integrador.prog2.enums.Rol;
 import integrador.prog2.exception.BusinessException;
 import integrador.prog2.exception.EntityNotFoundException;
 import integrador.prog2.exception.ValidationException;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class UsuarioService {
 
-    private final UsuarioDAO usuarioDAO;
-
-    public UsuarioService() {
-        this.usuarioDAO = new UsuarioDAO();
-    }
-
     public List<Usuario> listar() {
-        return usuarioDAO.listar();
+        return MemoriaDatos.USUARIOS.stream()
+                .filter(usuario -> !usuario.isEliminado())
+                .sorted(Comparator.comparing(Usuario::getId))
+                .toList();
     }
 
     public Usuario buscarPorId(Long id) {
         validarId(id);
 
-        return usuarioDAO.buscarPorId(id)
+        return MemoriaDatos.USUARIOS.stream()
+                .filter(usuario -> !usuario.isEliminado())
+                .filter(usuario -> usuario.getId().equals(id))
+                .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Usuario", id));
     }
 
@@ -44,7 +45,7 @@ public class UsuarioService {
 
         String mailNormalizado = mail.trim().toLowerCase();
 
-        if (usuarioDAO.existeMail(mailNormalizado)) {
+        if (existeMail(mailNormalizado)) {
             throw new BusinessException("Ya existe un usuario con ese mail.");
         }
 
@@ -56,8 +57,11 @@ public class UsuarioService {
                 contrasena.trim(),
                 rol
         );
+        usuario.setId(MemoriaDatos.siguienteIdUsuario());
 
-        return usuarioDAO.crear(usuario);
+        MemoriaDatos.USUARIOS.add(usuario);
+
+        return usuario;
     }
 
     public Usuario actualizar(
@@ -86,7 +90,7 @@ public class UsuarioService {
 
             String mailNormalizado = nuevoMail.trim().toLowerCase();
 
-            if (usuarioDAO.existeMailEnOtroUsuario(mailNormalizado, id)) {
+            if (existeMailEnOtroUsuario(mailNormalizado, id)) {
                 throw new BusinessException("Ya existe otro usuario con ese mail.");
             }
 
@@ -105,56 +109,96 @@ public class UsuarioService {
             usuario.setRol(nuevoRol);
         }
 
-        return usuarioDAO.actualizar(usuario);
+        return usuario;
     }
 
     public void eliminar(Long id) {
         validarId(id);
 
-        buscarPorId(id);
+        Usuario usuario = buscarPorId(id);
+        usuario.setEliminado(true);
+    }
 
-        usuarioDAO.eliminar(id);
+    public void validarMailDisponible(String mail) {
+        validarMail(mail);
+
+        String mailNormalizado = mail.trim().toLowerCase();
+
+        if (existeMail(mailNormalizado)) {
+            throw new BusinessException("Ya existe un usuario con ese mail.");
+        }
+    }
+
+    public boolean tienePerfil(Long usuarioId) {
+        validarId(usuarioId);
+
+        Usuario usuario = buscarPorId(usuarioId);
+
+        return usuario.getPerfilUsuario() != null && !usuario.getPerfilUsuario().isEliminado();
+    }
+
+    public void validarUsuarioSinPerfil(Long usuarioId) {
+        validarId(usuarioId);
+
+        Usuario usuario = buscarPorId(usuarioId);
+
+        if (usuario.getPerfilUsuario() != null && !usuario.getPerfilUsuario().isEliminado()) {
+            throw new BusinessException("El usuario ya tiene un perfil asociado.");
+        }
+    }
+
+    private boolean existeMail(String mail) {
+        return MemoriaDatos.USUARIOS.stream()
+                .filter(usuario -> !usuario.isEliminado())
+                .anyMatch(usuario -> usuario.getMail().equalsIgnoreCase(mail));
+    }
+
+    private boolean existeMailEnOtroUsuario(String mail, Long idUsuario) {
+        return MemoriaDatos.USUARIOS.stream()
+                .filter(usuario -> !usuario.isEliminado())
+                .filter(usuario -> !usuario.getId().equals(idUsuario))
+                .anyMatch(usuario -> usuario.getMail().equalsIgnoreCase(mail));
     }
 
     private void validarId(Long id) {
         if (id == null || id <= 0) {
-            throw new ValidationException("El id debe ser un número mayor que cero.");
+            throw new ValidationException("El id debe ser un numero mayor que cero.");
         }
     }
 
     private void validarNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ValidationException("El nombre del usuario no puede estar vacío.");
+            throw new ValidationException("El nombre del usuario no puede estar vacio.");
         }
     }
 
     private void validarApellido(String apellido) {
         if (apellido == null || apellido.trim().isEmpty()) {
-            throw new ValidationException("El apellido del usuario no puede estar vacío.");
+            throw new ValidationException("El apellido del usuario no puede estar vacio.");
         }
     }
 
     private void validarMail(String mail) {
         if (mail == null || mail.trim().isEmpty()) {
-            throw new ValidationException("El mail del usuario no puede estar vacío.");
+            throw new ValidationException("El mail del usuario no puede estar vacio.");
         }
 
         String mailNormalizado = mail.trim();
 
         if (!mailNormalizado.contains("@") || !mailNormalizado.contains(".")) {
-            throw new ValidationException("El mail ingresado no tiene un formato válido.");
+            throw new ValidationException("El mail ingresado no tiene un formato valido.");
         }
     }
 
     private void validarContrasena(String contrasena) {
         if (contrasena == null || contrasena.trim().isEmpty()) {
-            throw new ValidationException("La contraseña no puede estar vacía.");
+            throw new ValidationException("La contraseña no puede estar vacia.");
         }
     }
 
     private void validarRol(Rol rol) {
         if (rol == null) {
-            throw new ValidationException("Debe seleccionar un rol válido.");
+            throw new ValidationException("Debe seleccionar un rol valido.");
         }
     }
 
@@ -164,14 +208,5 @@ public class UsuarioService {
         }
 
         return texto.trim();
-    }
-    public void validarMailDisponible(String mail) {
-        validarMail(mail);
-
-        String mailNormalizado = mail.trim().toLowerCase();
-
-        if (usuarioDAO.existeMail(mailNormalizado)) {
-            throw new BusinessException("Ya existe un usuario con ese mail.");
-        }
     }
 }

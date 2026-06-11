@@ -260,7 +260,7 @@ public class PedidoMenu {
                     + " | " + producto.getNombre()
                     + " | Precio: " + producto.getPrecio()
                     + " | Stock: " + producto.getStock()
-                    + " | Disponible: " + (producto.getDisponible() ? "Sí" : "No"));
+                    + " | Disponible: " + (producto.getDisponible() ? "Si" : "No"));
         }
     }
 

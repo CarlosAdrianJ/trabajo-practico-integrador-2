@@ -95,7 +95,7 @@ public class Producto extends Base {
 
     @Override
     public String toString() {
-        String nombreCategoria = categoria != null ? categoria.getNombre() : "Sin categoría";
+        String nombreCategoria = categoria != null ? categoria.getNombre() : "Sin categoria";
 
         return "Producto{" +
                 "id=" + getId() +

@@ -41,7 +41,7 @@ public class UsuarioMenu {
                     lector.pausar();
                     break;
                 case 0:
-                    System.out.println("Volviendo al menú principal...");
+                    System.out.println("Volviendo al menu principal...");
                     break;
                 default:
                     System.out.println("Opcion invalida. Intente nuevamente.");
@@ -223,7 +223,7 @@ public class UsuarioMenu {
             case 1 -> Rol.ADMIN;
             case 2 -> Rol.USUARIO;
             case 0 -> null;
-            default -> throw new IllegalArgumentException("Opción invalida para rol.");
+            default -> throw new IllegalArgumentException("Opcion invalida para rol.");
         };
     }
 
@@ -234,13 +234,19 @@ public class UsuarioMenu {
         System.out.println("Mail: " + usuario.getMail());
         System.out.println("Celular: " + mostrarTexto(usuario.getCelular()));
         System.out.println("Rol: " + usuario.getRol());
+        if (usuario.getPerfilUsuario() != null) {
+            System.out.println("Perfil asociado: ID " + usuario.getPerfilUsuario().getId());
+            System.out.println("DNI perfil: " + mostrarTexto(usuario.getPerfilUsuario().getDni()));
+            System.out.println("Ciudad perfil: " + mostrarTexto(usuario.getPerfilUsuario().getCiudad()));
+        } else {
+            System.out.println("Perfil asociado: Sin perfil");
+        }
     }
 
     private String mostrarTexto(String texto) {
         if (texto == null || texto.trim().isEmpty()) {
             return "-";
         }
-
         return texto;
     }
 }

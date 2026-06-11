@@ -11,6 +11,7 @@ public class MenuPrincipal {
     private final ProductoMenu productoMenu;
     private final UsuarioMenu usuarioMenu;
     private final PedidoMenu pedidoMenu;
+    private final PerfilUsuarioMenu perfilUsuarioMenu;
 
     public MenuPrincipal() {
         this.scanner = new Scanner(System.in);
@@ -20,6 +21,7 @@ public class MenuPrincipal {
         this.productoMenu = new ProductoMenu(lector);
         this.usuarioMenu = new UsuarioMenu(lector);
         this.pedidoMenu = new PedidoMenu(lector);
+        this.perfilUsuarioMenu = new PerfilUsuarioMenu(lector);
     }
 
     public void iniciar() {
@@ -42,6 +44,9 @@ public class MenuPrincipal {
                 case 4:
                     pedidoMenu.mostrar();
                     break;
+                case 5:
+                    perfilUsuarioMenu.mostrar();
+                    break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -60,6 +65,7 @@ public class MenuPrincipal {
         System.out.println("2. Productos");
         System.out.println("3. Usuarios");
         System.out.println("4. Pedidos");
+        System.out.println("5. Perfiles de usuario");
         System.out.println("0. Salir");
     }
 }

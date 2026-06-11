@@ -10,6 +10,7 @@ public class Usuario extends Base {
     private String celular;
     private String contrasena;
     private Rol rol;
+    private PerfilUsuario perfilUsuario;
 
     public Usuario() {
         super();
@@ -82,6 +83,14 @@ public class Usuario extends Base {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public PerfilUsuario getPerfilUsuario() {
+        return perfilUsuario;
+    }
+
+    public void setPerfilUsuario(PerfilUsuario perfilUsuario) {
+        this.perfilUsuario = perfilUsuario;
     }
 
     @Override
